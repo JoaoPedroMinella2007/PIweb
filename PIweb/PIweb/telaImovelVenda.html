@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BlueHorizon - Imóvel à Venda</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #41687a; /* azul sólido */
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+  }
+  h1 {
+    color: #f0f0f0;
+    text-align: center;
+    margin: 60px 0 20px 0; /* puxei pra baixo */
+    font-weight: 700;
+    font-size: 24px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  }
+  main {
+    max-width: 900px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  .card-image {
+    flex: 1 1 320px;
+    min-height: 220px;
+    background: #fff;
+    border: 1px solid #999;
+    box-shadow: 1px 1px 5px #3333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-image img, .card-image svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .card-info-owner,
+  .card-info-property {
+    background: #ccc;
+    border: 1px solid #a0a0a0;
+    box-shadow: inset 0 0 8px #8886;
+    padding: 16px 20px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .card-info-owner {
+    flex: 1 1 320px;
+    min-height: 140px;
+  }
+  .card-info-owner > h2,
+  .card-info-property > h2 {
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 7px;
+    text-align: center;
+  }
+  .card-info-owner p,
+  .card-info-property p {
+    margin: 7px 0;
+  }
+  .card-info-property {
+    flex: 1 1 500px;
+    min-height: 220px;
+  }
+  .divider-line {
+    margin: 14px 0 12px 0;
+    border: none;
+    border-bottom: 1px solid #888;
+  }
+  .info-double-col {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+  .info-double-col > div {
+    flex: 1;
+  }
+  .info-double-col div p {
+    margin: 5px 0;
+  }
+
+  @media (max-width: 750px) {
+    main {
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-info-property,
+    .card-info-owner {
+      min-width: 320px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>IMÓVEL À VENDA</h1>
+
+<main>
+  <section class="card-image" aria-label="Imagem do imóvel">
+    <img src="imageExemplos/imagemExemplo.jpg" alt="Imagem do imóvel">
+  </section>
+
+  <section class="card-info-property" aria-label="Informações do imóvel">
+    <h2>Informações do imóvel</h2>
+    <p><strong>ID:</strong> 001</p>
+    <p><strong>Valor:</strong> R$ 750.000</p>
+    <p><strong>Disponibilidade:</strong> Disponível</p>
+    <p><strong>Data de cadastro:</strong> 23/06/2025</p>
+
+    <hr class="divider-line" />
+
+    <div class="info-double-col">
+      <div>
+        <p><strong>Área (m²):</strong> 250</p>
+        <p><strong>Quartos:</strong> 4</p>
+        <p><strong>Banheiros:</strong> 3</p>
+        <p><strong>Vagas de garagem:</strong> 2</p>
+        <p><strong>Mobiliada:</strong> Sim</p>
+        <p><strong>Jardim:</strong> Sim</p>
+      </div>
+      <div>
+        <p><strong>Piscina:</strong> Sim</p>
+        <p><strong>Sistema de segurança:</strong> Alarme</p>
+        <p><strong>Cidade:</strong> Florianópolis</p>
+        <p><strong>Rua:</strong> Av. Beira-Mar</p>
+        <p><strong>Numeração do imóvel:</strong> 123</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card-info-owner" aria-label="Informações do proprietário">
+    <h2>Informações do proprietário</h2>
+    <p><strong>Nome:</strong> João da Silva</p>
+    <p><strong>Email:</strong> joao@email.com</p>
+    <p><strong>Telefone:</strong> (48) 99999-9999</p>
+  </section>
+</main>
+
+</body>
+</html>
