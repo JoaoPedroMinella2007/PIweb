@@ -1,0 +1,355 @@
+<?php
+
+include_once("model/propriedadesDAO.php");
+?>
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BlueHorizon - página inicial</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: white;
+      margin: 24px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .filter-container {
+      background-color: #57b7e3;
+      border-radius: 12px;
+      border: 1px solid #000000;
+      padding: 24px 32px;
+      margin-bottom: 48px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      gap: 12px;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-size: 18px;
+      color: #121212;
+      margin: 0;
+    }
+
+    .property-code-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .property-code-label {
+      font-weight: 600;
+      font-size: 13px;
+      color: #121212;
+    }
+
+    .property-code-input {
+      width: 425px;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #cccccc;
+      color: #555555;
+      background: white;
+    }
+
+    .property-code-input::placeholder {
+      font-weight: 400;
+      color: #b5b5b5;
+    }
+
+    .property-code-input:focus {
+      outline-offset: 2px;
+      outline-color: #57b7e3;
+    }
+
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px 28px;
+      align-items: center;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #121212;
+    }
+
+    input[type="text"] {
+      border-radius: 6px;
+      border: 1px solid #cccccc;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 400;
+      color: #555555;
+      background: white;
+      outline-offset: 2px;
+      outline-color: transparent;
+      transition: outline-color 0.2s ease;
+    }
+
+    input[type="text"]::placeholder {
+      color: #b5b5b5;
+      font-weight: 400;
+    }
+
+    input[type="text"]:focus {
+      outline-color: #57b7e3;
+    }
+
+    .button-container {
+      grid-column: 4 / 5;
+      justify-self: center;
+      padding-top: 24px;
+    }
+
+    .btn-search {
+      background: linear-gradient(to bottom, #e4e4e4 0%, #aaa 100%);
+      border-radius: 4px;
+      border: 1px solid #888;
+      padding: 6px 16px;
+      color: #121212;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 white;
+      transition: background 0.3s ease, box-shadow 0.2s ease;
+      user-select: none;
+      width: 200px;
+    }
+
+    .btn-search:hover {
+      background: linear-gradient(to bottom, #cccccc 0%, #999999 100%);
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Div dos cards com scroll horizontal */
+    .results-container {
+      background-color: #57b7e3;
+      border-radius: 12px;
+      border: 1px solid #000000;
+      padding: 24px;
+      height: 600px;
+
+      display: flex;
+      flex-wrap: nowrap; /* Sem quebra de linha */
+      overflow-x: auto;  /* Scroll horizontal */
+      overflow-y: hidden; /* Sem scroll vertical */
+      gap: 24px;
+    }
+
+    /* Estilo dos cards */
+    .property-card {
+      min-width: 280px;
+      background: #d9d9d9;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      cursor: pointer; /* Deixa o cursor de mãozinha */
+      transition: transform 0.2s ease;
+    }
+
+    .property-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    }
+
+    .property-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .property-card .info {
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .property-card .info div {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .property-card .info div span:first-child {
+      font-weight: bold;
+      color: #000;
+    }
+
+    /* Responsivo */
+    @media (max-width: 1024px) {
+      .inputs-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .button-container {
+        grid-column: auto;
+        justify-self: start;
+        padding-top: 12px;
+      }
+
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .property-code-container {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 6px;
+      }
+
+      .property-code-input {
+        width: 150px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .inputs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="filter-container" role="region" aria-labelledby="filterTitle">
+    <div class="header-row">
+      <h2 id="filterTitle">Pesquisa filtrada</h2>
+      <div class="property-code-container">
+        <label for="codImovel" class="property-code-label">Cód. do Imóvel:</label>
+        <input id="codImovel" type="text" class="property-code-input" placeholder="Inserir cód do imóvel" />
+      </div>
+    </div>
+    <form>
+      <div class="inputs-grid">
+        <div class="input-group">
+          <label for="area">Área (metro quadrado)</label>
+          <input id="area" type="text" placeholder="Inserir área (m²)" />
+        </div>
+        <div class="input-group">
+          <label for="vagas">Vagas de Garagem</label>
+          <input id="vagas" type="text" placeholder="Inserir vagas" />
+        </div>
+        <div class="input-group">
+          <label for="sistemaSeguranca">Sistema de Segurança</label>
+          <input id="sistemaSeguranca" type="text" placeholder="Inserir sistema de segurança" />
+        </div>
+        <div class="input-group">
+          <label for="rua">Rua</label>
+          <input id="rua" type="text" placeholder="Inserir rua" />
+        </div>
+        <div class="input-group">
+          <label for="quartos">Quartos</label>
+          <input id="quartos" type="text" placeholder="Inserir quartos" />
+        </div>
+        <div class="input-group">
+          <label for="mobiliada">Mobiliada</label>
+          <input id="mobiliada" type="text" placeholder="Inserir se é mobiliada" />
+        </div>
+        <div class="input-group">
+          <label for="piscina">Piscina</label>
+          <input id="piscina" type="text" placeholder="Inserir piscina" />
+        </div>
+        <div class="input-group">
+          <label for="numeroCasa">Número da Casa</label>
+          <input id="numeroCasa" type="text" placeholder="Inserir número da casa" />
+        </div>
+        <div class="input-group">
+          <label for="banheiros">Banheiros</label>
+          <input id="banheiros" type="text" placeholder="Inserir banheiros" />
+        </div>
+        <div class="input-group">
+          <label for="jardim">Jardim</label>
+          <input id="jardim" type="text" placeholder="Inserir Jardim" />
+        </div>
+        <div class="input-group">
+          <label for="cidade">Cidade</label>
+          <input id="cidade" type="text" placeholder="Inserir cidade" />
+        </div>
+        <div class="button-container">
+          <button type="submit" class="btn-search">Pesquisar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Cards dos imóveis -->
+  <div class="results-container" aria-label="Resultados da pesquisa">
+
+  <?php 
+ $result =  listarPropriedades();
+
+ foreach ($result as $imovel){
+ // print_r($imovel);
+ // die();
+?>
+ 
+    <div class="property-card" data-id="001">
+      <img src="imageExemplos/imagemExemplo.jpg" alt="Imagem imóvel" />
+      <div class="info">
+        <div><span>ID:</span><span><?php echo $imovel['id_propriedade']?></span></div>
+        <div><span>Cidade:</span><span><?php echo $imovel['cidade']; ?></span></div>
+        <div><span>Rua:</span><span><?php echo $imovel['rua']?></span></div>
+        <div><span>Número:</span><span><?php echo $imovel['numeroCasa']?></span></div>
+        <div><span>Área:</span><span><?php echo $imovel['area']?></span></div>
+        <div><span>Banheiros:</span><span><?php echo $imovel['banheiros']?></span></div>
+        <div><span>Quartos:</span><span><?php echo $imovel['quartos']?></span></div>
+        <div><span>Vagas Garagem:</span><span><?php echo $imovel['vagasGaragem'] ? 'Sim' : 'Não';?></span></div>
+        <div><span>Jardim:</span><span><?php echo $imovel['jardim'] ? 'Sim' : 'Não'; ?></span></div>
+        <div><span>Piscina:</span><span><?php echo $imovel['piscina']  ? 'Sim' : 'Não'; ?></span></div>
+        <div><span>Sistema Segurança:</span><span><?php echo $imovel['sistemaSeguranca'] ? 'Sim' : 'Não';?></span></div>
+        <div><span>Mobiliada:</span><span><?php echo $imovel['mobilia'] ? 'Sim' : 'Não'; ?></span></div>
+      </div>
+    </div>
+   
+   <?php 
+ }
+
+  ?>
+
+   
+
+    <!-- Repita os cards conforme precisar -->
+  </div>
+
+  <script>
+    // Torna todos os cards clicáveis e leva para a página de detalhes passando o id do imóvel na URL
+    document.querySelectorAll('.property-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.getAttribute('data-id');
+        if(id) {
+          window.location.href = `telaImovelVenda.html?id=${id}`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
