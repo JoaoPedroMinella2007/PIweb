@@ -239,6 +239,68 @@ include_once("model/propriedadesDAO.php");
     }
   </style>
 </head>
+
+<?php
+$filtros=[];
+
+$area = $_GET['area'];
+if(empty($area)==false){
+   $filtros['area'] = $area;
+}
+
+$vagas = $_GET['vagas'];
+if(empty($vagas)==false){
+   $filtros['vagas'] = $area;
+}
+
+$sistemaSeguranca = $_GET['sistemaSeguranca'];;
+if(empty($sistemaSeguranca)==false){
+   $filtros['sistemaSeguranca'] = $sistemaSeguranca;
+}
+
+$rua = $_GET['rua'];;
+if(empty($rua)==false){
+   $filtros['rua'] = $rua;
+}
+
+$quartos = $_GET['quartos'];;
+if(empty($quartos)==false){
+   $filtros['quartos'] = $quartos;
+}
+$mobiliada = $_GET['mobiliada'];;
+if(empty($mobiliada)==false){
+   $filtros['mobiliada'] = $mobiliada;
+}
+
+$vagas = $_GET['vagas'];;
+if(empty($vagas)==false){
+   $filtros['vagas'] = $vagas;
+}
+$piscina = $_GET['piscina'];;
+if(empty($piscina)==false){
+   $filtros['piscina'] = $piscina;
+}
+
+$numeroCasa = $_GET['numeroCasa'];;
+if(empty($numeroCasa)==false){
+   $filtros['numeroCasa'] = $numeroCasa;
+}
+$banheiros = $_GET['banheiros'];;
+if(empty($banheiros)==false){
+   $filtros['banheiros'] = $banheiros;
+}
+
+$jardim = $_GET['jardim'];;
+if(empty($jardim)==false){
+   $filtros['jardim'] = $jardim;
+}
+
+$cidade = $_GET['cidade'];;
+if(empty($cidade)==false){
+   $filtros['cidade'] = $cidade;
+}
+
+?>
 <body>
   <div class="filter-container" role="region" aria-labelledby="filterTitle">
     <div class="header-row">
@@ -248,51 +310,51 @@ include_once("model/propriedadesDAO.php");
         <input id="codImovel" type="text" class="property-code-input" placeholder="Inserir cód do imóvel" />
       </div>
     </div>
-    <form>
+    <form  action="telaHome.php" method="get">
       <div class="inputs-grid">
         <div class="input-group">
           <label for="area">Área (metro quadrado)</label>
-          <input id="area" type="text" placeholder="Inserir área (m²)" />
+          <input id="area"  name="area" type="text" placeholder="Inserir área (m²)" value="<?php echo $area;?>"/>
         </div>
         <div class="input-group">
           <label for="vagas">Vagas de Garagem</label>
-          <input id="vagas" type="text" placeholder="Inserir vagas" />
+          <input id="vagas" name="vagas" type="text" placeholder="Inserir vagas" />
         </div>
         <div class="input-group">
           <label for="sistemaSeguranca">Sistema de Segurança</label>
-          <input id="sistemaSeguranca" type="text" placeholder="Inserir sistema de segurança" />
+          <input id="sistemaSeguranca" name="sistemaSeguranca" type="text"  placeholder="Inserir sistema de segurança" />
         </div>
         <div class="input-group">
           <label for="rua">Rua</label>
-          <input id="rua" type="text" placeholder="Inserir rua" />
+          <input id="rua" name="rua" type="text"  placeholder="Inserir rua" />
         </div>
         <div class="input-group">
           <label for="quartos">Quartos</label>
-          <input id="quartos" type="text" placeholder="Inserir quartos" />
+          <input id="quartos" name="quartos" type="text" placeholder="Inserir quartos" />
         </div>
         <div class="input-group">
           <label for="mobiliada">Mobiliada</label>
-          <input id="mobiliada" type="text" placeholder="Inserir se é mobiliada" />
+          <input id="mobiliada" name="mobiliada" type="text" placeholder="Inserir se é mobiliada" />
         </div>
         <div class="input-group">
           <label for="piscina">Piscina</label>
-          <input id="piscina" type="text" placeholder="Inserir piscina" />
+          <input id="piscina" name="piscina" type="text" placeholder="Inserir piscina" />
         </div>
         <div class="input-group">
           <label for="numeroCasa">Número da Casa</label>
-          <input id="numeroCasa" type="text" placeholder="Inserir número da casa" />
+          <input id="numeroCasa"  name="numeroCasa" type="text" placeholder="Inserir número da casa" />
         </div>
         <div class="input-group">
           <label for="banheiros">Banheiros</label>
-          <input id="banheiros" type="text" placeholder="Inserir banheiros" />
+          <input id="banheiros"  name="banheiros" type="text" placeholder="Inserir banheiros" />
         </div>
         <div class="input-group">
           <label for="jardim">Jardim</label>
-          <input id="jardim" type="text" placeholder="Inserir Jardim" />
+          <input id="jardim" name="jardim" type="text" placeholder="Inserir Jardim" />
         </div>
         <div class="input-group">
           <label for="cidade">Cidade</label>
-          <input id="cidade" type="text" placeholder="Inserir cidade" />
+          <input id="cidade" name="cidade" type="text" placeholder="Inserir cidade" />
         </div>
         <div class="button-container">
           <button type="submit" class="btn-search">Pesquisar</button>
@@ -305,7 +367,7 @@ include_once("model/propriedadesDAO.php");
   <div class="results-container" aria-label="Resultados da pesquisa">
 
   <?php 
- $result =  listarPropriedades();
+ $result =  listarPropriedades($filtros);
 
  foreach ($result as $imovel){
  // print_r($imovel);
