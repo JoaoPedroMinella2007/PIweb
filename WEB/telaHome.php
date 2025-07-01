@@ -378,13 +378,13 @@ if(empty($cidade)==false){
       <img src="imageExemplos/imagemExemplo.jpg" alt="Imagem imóvel" />
       <div class="info">
         <div><span>ID:</span><span><?php echo $imovel['id_propriedade']?></span></div>
-        <div><span>Cidade:</span><span><?php echo $imovel['cidade']; ?></span></div>
+        <div><span>Cidade:</span><span><?php echo $imovel['nome_cidade']; ?></span></div>
         <div><span>Rua:</span><span><?php echo $imovel['rua']?></span></div>
         <div><span>Número:</span><span><?php echo $imovel['numeroCasa']?></span></div>
         <div><span>Área:</span><span><?php echo $imovel['area']?></span></div>
         <div><span>Banheiros:</span><span><?php echo $imovel['banheiros']?></span></div>
         <div><span>Quartos:</span><span><?php echo $imovel['quartos']?></span></div>
-        <div><span>Vagas Garagem:</span><span><?php echo $imovel['vagasGaragem'] ? 'Sim' : 'Não';?></span></div>
+        <div><span>Vagas Garagem:</span><span><?php echo $imovel['vagasGaragem'] ?></span></div>
         <div><span>Jardim:</span><span><?php echo $imovel['jardim'] ? 'Sim' : 'Não'; ?></span></div>
         <div><span>Piscina:</span><span><?php echo $imovel['piscina']  ? 'Sim' : 'Não'; ?></span></div>
         <div><span>Sistema Segurança:</span><span><?php echo $imovel['sistemaSeguranca'] ? 'Sim' : 'Não';?></span></div>
