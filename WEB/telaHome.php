@@ -1,9 +1,21 @@
 <?php
+include_once './model/propriedadesDAO.php';
 
-include_once("model/propriedadesDAO.php");
+// Filtros
+$filtros = [];
+
+$campos = [
+  'area', 'vagas', 'sistemaSeguranca', 'rua', 'quartos',
+  'mobiliada', 'piscina', 'numeroCasa', 'banheiros',
+  'jardim', 'cidade'
+];
+
+foreach ($campos as $campo) {
+  if (!empty($_GET[$campo])) {
+    $filtros[$campo] = $_GET[$campo];
+  }
+}
 ?>
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -239,68 +251,6 @@ include_once("model/propriedadesDAO.php");
     }
   </style>
 </head>
-
-<?php
-$filtros=[];
-
-$area = $_GET['area'];
-if(empty($area)==false){
-   $filtros['area'] = $area;
-}
-
-$vagas = $_GET['vagas'];
-if(empty($vagas)==false){
-   $filtros['vagas'] = $area;
-}
-
-$sistemaSeguranca = $_GET['sistemaSeguranca'];;
-if(empty($sistemaSeguranca)==false){
-   $filtros['sistemaSeguranca'] = $sistemaSeguranca;
-}
-
-$rua = $_GET['rua'];;
-if(empty($rua)==false){
-   $filtros['rua'] = $rua;
-}
-
-$quartos = $_GET['quartos'];;
-if(empty($quartos)==false){
-   $filtros['quartos'] = $quartos;
-}
-$mobiliada = $_GET['mobiliada'];;
-if(empty($mobiliada)==false){
-   $filtros['mobiliada'] = $mobiliada;
-}
-
-$vagas = $_GET['vagas'];;
-if(empty($vagas)==false){
-   $filtros['vagas'] = $vagas;
-}
-$piscina = $_GET['piscina'];;
-if(empty($piscina)==false){
-   $filtros['piscina'] = $piscina;
-}
-
-$numeroCasa = $_GET['numeroCasa'];;
-if(empty($numeroCasa)==false){
-   $filtros['numeroCasa'] = $numeroCasa;
-}
-$banheiros = $_GET['banheiros'];;
-if(empty($banheiros)==false){
-   $filtros['banheiros'] = $banheiros;
-}
-
-$jardim = $_GET['jardim'];;
-if(empty($jardim)==false){
-   $filtros['jardim'] = $jardim;
-}
-
-$cidade = $_GET['cidade'];;
-if(empty($cidade)==false){
-   $filtros['cidade'] = $cidade;
-}
-
-?>
 <body>
   <div class="filter-container" role="region" aria-labelledby="filterTitle">
     <div class="header-row">
@@ -310,52 +260,33 @@ if(empty($cidade)==false){
         <input id="codImovel" type="text" class="property-code-input" placeholder="Inserir cód do imóvel" />
       </div>
     </div>
-    <form  action="telaHome.php" method="get">
+    <form action="telaHome.php" method="get">
       <div class="inputs-grid">
-        <div class="input-group">
-          <label for="area">Área (metro quadrado)</label>
-          <input id="area"  name="area" type="text" placeholder="Inserir área (m²)" value="<?php echo $area;?>"/>
-        </div>
-        <div class="input-group">
-          <label for="vagas">Vagas de Garagem</label>
-          <input id="vagas" name="vagas" type="text" placeholder="Inserir vagas" />
-        </div>
-        <div class="input-group">
-          <label for="sistemaSeguranca">Sistema de Segurança</label>
-          <input id="sistemaSeguranca" name="sistemaSeguranca" type="text"  placeholder="Inserir sistema de segurança" />
-        </div>
-        <div class="input-group">
-          <label for="rua">Rua</label>
-          <input id="rua" name="rua" type="text"  placeholder="Inserir rua" />
-        </div>
-        <div class="input-group">
-          <label for="quartos">Quartos</label>
-          <input id="quartos" name="quartos" type="text" placeholder="Inserir quartos" />
-        </div>
-        <div class="input-group">
-          <label for="mobiliada">Mobiliada</label>
-          <input id="mobiliada" name="mobiliada" type="text" placeholder="Inserir se é mobiliada" />
-        </div>
-        <div class="input-group">
-          <label for="piscina">Piscina</label>
-          <input id="piscina" name="piscina" type="text" placeholder="Inserir piscina" />
-        </div>
-        <div class="input-group">
-          <label for="numeroCasa">Número da Casa</label>
-          <input id="numeroCasa"  name="numeroCasa" type="text" placeholder="Inserir número da casa" />
-        </div>
-        <div class="input-group">
-          <label for="banheiros">Banheiros</label>
-          <input id="banheiros"  name="banheiros" type="text" placeholder="Inserir banheiros" />
-        </div>
-        <div class="input-group">
-          <label for="jardim">Jardim</label>
-          <input id="jardim" name="jardim" type="text" placeholder="Inserir Jardim" />
-        </div>
-        <div class="input-group">
-          <label for="cidade">Cidade</label>
-          <input id="cidade" name="cidade" type="text" placeholder="Inserir cidade" />
-        </div>
+        <?php
+        // Geração automática dos campos com manutenção de valores
+        $labels = [
+          'area' => 'Área (metro quadrado)',
+          'vagas' => 'Vagas de Garagem',
+          'sistemaSeguranca' => 'Sistema de Segurança',
+          'rua' => 'Rua',
+          'quartos' => 'Quartos',
+          'mobiliada' => 'Mobiliada',
+          'piscina' => 'Piscina',
+          'numeroCasa' => 'Número da Casa',
+          'banheiros' => 'Banheiros',
+          'jardim' => 'Jardim',
+          'cidade' => 'Cidade'
+        ];
+
+        foreach ($labels as $campo => $label) {
+          $valor = htmlspecialchars($_GET[$campo] ?? '', ENT_QUOTES);
+          echo "
+          <div class='input-group'>
+            <label for='{$campo}'>{$label}</label>
+            <input id='{$campo}' name='{$campo}' type='text' placeholder='Inserir {$label}' value='{$valor}' />
+          </div>";
+        }
+        ?>
         <div class="button-container">
           <button type="submit" class="btn-search">Pesquisar</button>
         </div>
@@ -365,50 +296,45 @@ if(empty($cidade)==false){
 
   <!-- Cards dos imóveis -->
   <div class="results-container" aria-label="Resultados da pesquisa">
+    <?php 
+    $result = listarPropriedades($filtros);
+    foreach ($result as $imovel) {
+      echo '<div class="property-card" data-id="' . $imovel['id_propriedade'] . '">';
 
-  <?php 
- $result =  listarPropriedades($filtros);
+      // Imagem
+      if (!empty($imovel['imagem_blob'])) {
+        $imgBase64 = base64_encode($imovel['imagem_blob']);
+        echo "<img src='data:image/jpeg;base64,{$imgBase64}' alt='Imagem imóvel' />";
+      } else {
+        echo "<img src='imageExemplos/imagemExemplo.jpg' alt='Imagem padrão' />";
+      }
 
- foreach ($result as $imovel){
- // print_r($imovel);
- // die();
-?>
- 
-    <div class="property-card" data-id="001">
-      <img src="imageExemplos/imagemExemplo.jpg" alt="Imagem imóvel" />
-      <div class="info">
-        <div><span>ID:</span><span><?php echo $imovel['id_propriedade']?></span></div>
-        <div><span>Cidade:</span><span><?php echo $imovel['nome_cidade']; ?></span></div>
-        <div><span>Rua:</span><span><?php echo $imovel['rua']?></span></div>
-        <div><span>Número:</span><span><?php echo $imovel['numeroCasa']?></span></div>
-        <div><span>Área:</span><span><?php echo $imovel['area']?></span></div>
-        <div><span>Banheiros:</span><span><?php echo $imovel['banheiros']?></span></div>
-        <div><span>Quartos:</span><span><?php echo $imovel['quartos']?></span></div>
-        <div><span>Vagas Garagem:</span><span><?php echo $imovel['vagasGaragem'] ?></span></div>
-        <div><span>Jardim:</span><span><?php echo $imovel['jardim'] ? 'Sim' : 'Não'; ?></span></div>
-        <div><span>Piscina:</span><span><?php echo $imovel['piscina']  ? 'Sim' : 'Não'; ?></span></div>
-        <div><span>Sistema Segurança:</span><span><?php echo $imovel['sistemaSeguranca'] ? 'Sim' : 'Não';?></span></div>
-        <div><span>Mobiliada:</span><span><?php echo $imovel['mobilia'] ? 'Sim' : 'Não'; ?></span></div>
-      </div>
-    </div>
-   
-   <?php 
- }
-
-  ?>
-
-   
-
-    <!-- Repita os cards conforme precisar -->
+      echo '<div class="info">';
+      echo '<div><span>ID:</span><span>' . $imovel['id_propriedade'] . '</span></div>';
+      echo '<div><span>Cidade:</span><span>' . $imovel['nome_cidade'] . '</span></div>';
+      echo '<div><span>Rua:</span><span>' . $imovel['rua'] . '</span></div>';
+      echo '<div><span>Número:</span><span>' . $imovel['numeroCasa'] . '</span></div>';
+      echo '<div><span>Área:</span><span>' . $imovel['area'] . '</span></div>';
+      echo '<div><span>Banheiros:</span><span>' . $imovel['banheiros'] . '</span></div>';
+      echo '<div><span>Quartos:</span><span>' . $imovel['quartos'] . '</span></div>';
+      echo '<div><span>Vagas Garagem:</span><span>' . $imovel['vagasGaragem'] . '</span></div>';
+      echo '<div><span>Jardim:</span><span>' . ($imovel['jardim'] ? 'Sim' : 'Não') . '</span></div>';
+      echo '<div><span>Piscina:</span><span>' . ($imovel['piscina'] ? 'Sim' : 'Não') . '</span></div>';
+      echo '<div><span>Sistema Segurança:</span><span>' . ($imovel['sistemaSeguranca'] ? 'Sim' : 'Não') . '</span></div>';
+      echo '<div><span>Mobiliada:</span><span>' . ($imovel['mobilia'] ? 'Sim' : 'Não') . '</span></div>';
+      echo '</div>'; // .info
+      echo '</div>'; // .property-card
+    }
+    ?>
   </div>
 
   <script>
-    // Torna todos os cards clicáveis e leva para a página de detalhes passando o id do imóvel na URL
+    // Torna todos os cards clicáveis e leva para a página de detalhes
     document.querySelectorAll('.property-card').forEach(card => {
       card.addEventListener('click', () => {
         const id = card.getAttribute('data-id');
         if(id) {
-          window.location.href = `telaImovelVenda.html?id=${id}`;
+          window.location.href = `telaImovelVenda.php?id=${id}`;
         }
       });
     });

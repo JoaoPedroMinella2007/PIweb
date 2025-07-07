@@ -1,18 +1,30 @@
 <?php
-include_once("model/propriedadesDAO.php");
+// Ativa exibição de erros
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Pega o ID do imóvel via GET
+// Inclui o arquivo com as funções de acesso ao banco
+include_once __DIR__ . '/model/propriedadesDAO.php';
+
+// Pega o ID da URL
 $id = $_GET['id'] ?? null;
-
 if (!$id) {
-  die("ID do imóvel não fornecido.");
+    die("ID do imóvel não fornecido.");
 }
 
-// Busca os dados do imóvel no banco
+// Busca os dados do imóvel
 $imovel = buscarPropriedadePorId($id);
-
 if (!$imovel) {
-  die("Imóvel não encontrado.");
+    die("Imóvel não encontrado.");
+}
+
+// Prepara imagem em base64 ou imagem padrão
+$imagemBase64 = '';
+if (!empty($imovel['imagem_blob'])) {
+    $imagemBase64 = 'data:image/jpeg;base64,' . base64_encode($imovel['imagem_blob']);
+} else {
+    $imagemBase64 = 'imageExemplos/imagemExemplo.jpg';
 }
 ?>
 
@@ -23,14 +35,12 @@ if (!$imovel) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BlueHorizon - Imóvel à Venda</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background-color: #41687a; /* azul sólido */
+      background-color: #41687a;
       color: #222;
       display: flex;
       flex-direction: column;
@@ -64,7 +74,7 @@ if (!$imovel) {
       align-items: center;
       justify-content: center;
     }
-    .card-image img, .card-image svg {
+    .card-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -114,7 +124,6 @@ if (!$imovel) {
     .info-double-col div p {
       margin: 5px 0;
     }
-
     @media (max-width: 750px) {
       main {
         flex-direction: column;
@@ -133,42 +142,44 @@ if (!$imovel) {
 
 <main>
   <section class="card-image" aria-label="Imagem do imóvel">
-    <img src="imageExemplos/imagemExemplo.jpg" alt="Imagem do imóvel">
+    <img src="<?php echo $imagemBase64; ?>" alt="Imagem do imóvel">
   </section>
 
   <section class="card-info-property" aria-label="Informações do imóvel">
     <h2>Informações do imóvel</h2>
-    <p><strong>ID:</strong> <?php echo $imovel['id_propriedade']; ?></p>
-    <p><strong>Valor:</strong> R$ <?php echo number_format($imovel['valor'], 2, ',', '.'); ?></p>
-    <p><strong>Disponibilidade:</strong> <?php echo $imovel['disponivel'] ? 'Disponível' : 'Indisponível'; ?></p>
-    <p><strong>Data de cadastro:</strong> <?php echo date("d/m/Y", strtotime($imovel['dataCadastro'])); ?></p>
+    <p><strong>ID:</strong> <?php echo $imovel['id_propriedade'] ?? '---'; ?></p>
+    <p><strong>Valor:</strong> R$ <?php echo number_format($imovel['preco'] ?? 0, 2, ',', '.'); ?></p>
+    <p><strong>Disponibilidade:</strong> <?php echo ($imovel['disponibilidade'] ?? false) ? 'Disponível' : 'Indisponível'; ?></p>
+    <p><strong>Data de cadastro:</strong> 
+        <?php echo isset($imovel['data_cadastro']) ? date("d/m/Y", strtotime($imovel['data_cadastro'])) : '---'; ?>
+    </p>
 
     <hr class="divider-line" />
 
     <div class="info-double-col">
       <div>
-        <p><strong>Área (m²):</strong> <?php echo $imovel['area']; ?></p>
-        <p><strong>Quartos:</strong> <?php echo $imovel['quartos']; ?></p>
-        <p><strong>Banheiros:</strong> <?php echo $imovel['banheiros']; ?></p>
-        <p><strong>Vagas de garagem:</strong> <?php echo $imovel['vagasGaragem']; ?></p>
-        <p><strong>Mobiliada:</strong> <?php echo $imovel['mobilia'] ? 'Sim' : 'Não'; ?></p>
-        <p><strong>Jardim:</strong> <?php echo $imovel['jardim'] ? 'Sim' : 'Não'; ?></p>
+        <p><strong>Área (m²):</strong> <?php echo $imovel['area'] ?? '---'; ?></p>
+        <p><strong>Quartos:</strong> <?php echo $imovel['quartos'] ?? '---'; ?></p>
+        <p><strong>Banheiros:</strong> <?php echo $imovel['banheiros'] ?? '---'; ?></p>
+        <p><strong>Vagas de garagem:</strong> <?php echo $imovel['vagasGaragem'] ?? '---'; ?></p>
+        <p><strong>Mobiliada:</strong> <?php echo ($imovel['mobilia'] ?? false) ? 'Sim' : 'Não'; ?></p>
+        <p><strong>Jardim:</strong> <?php echo ($imovel['jardim'] ?? false) ? 'Sim' : 'Não'; ?></p>
       </div>
       <div>
-        <p><strong>Piscina:</strong> <?php echo $imovel['piscina'] ? 'Sim' : 'Não'; ?></p>
-        <p><strong>Sistema de segurança:</strong> <?php echo $imovel['sistemaSeguranca']; ?></p>
-        <p><strong>Cidade:</strong> <?php echo $imovel['nome_cidade']; ?></p>
-        <p><strong>Rua:</strong> <?php echo $imovel['rua']; ?></p>
-        <p><strong>Numeração do imóvel:</strong> <?php echo $imovel['numeroCasa']; ?></p>
+        <p><strong>Piscina:</strong> <?php echo ($imovel['piscina'] ?? false) ? 'Sim' : 'Não'; ?></p>
+        <p><strong>Sistema de segurança:</strong> <?php echo ($imovel['sistemaSeguranca'] ?? false) ? 'Sim' : 'Não'; ?></p>
+        <p><strong>Cidade:</strong> <?php echo $imovel['nome_cidade'] ?? '---'; ?></p>
+        <p><strong>Rua:</strong> <?php echo $imovel['rua'] ?? '---'; ?></p>
+        <p><strong>Numeração do imóvel:</strong> <?php echo $imovel['numeroCasa'] ?? '---'; ?></p>
       </div>
     </div>
   </section>
 
   <section class="card-info-owner" aria-label="Informações do proprietário">
     <h2>Informações do proprietário</h2>
-    <p><strong>Nome:</strong> <?php echo $imovel['nome_proprietario']; ?></p>
-    <p><strong>Email:</strong> <?php echo $imovel['email_proprietario']; ?></p>
-    <p><strong>Telefone:</strong> <?php echo $imovel['telefone_proprietario']; ?></p>
+    <p><strong>Nome:</strong> <?php echo $imovel['nome_proprietario'] ?? '---'; ?></p>
+    <p><strong>Email:</strong> <?php echo $imovel['email_proprietario'] ?? '---'; ?></p>
+    <p><strong>Telefone:</strong> <?php echo $imovel['telefone_proprietario'] ?? '---'; ?></p>
   </section>
 </main>
 
